@@ -1,4 +1,4 @@
-/*insertar registro en una tabla*/
+/*insertar registro en una tabla*/ 
 INSERT INTO producto (codigo,titulo,precio,fecha_alta,autor,img)
 	VALUES ('abcde00000','microfono hyperx',2500,CURDATE(),'Juan',NULL);
 	
