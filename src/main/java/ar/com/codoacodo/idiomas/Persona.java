@@ -14,10 +14,10 @@ public class Persona implements IHablar {
 
 	// ctrl+space
 	public void hablar() {
-		System.out.println(this.nombre + " sabe hablar: ");
+		System.out.println(this.nombre + "sabe hablar: ");
 		System.out.println(this.idioma);
 		for (IIdioma idioma : this.otrosIdiomas) {
-			System.out.println(", " + idioma);
+			System.out.println(idioma);
 		}
 	}
 
@@ -63,6 +63,15 @@ public class Persona implements IHablar {
 			existe = this.otrosIdiomas[i].equals(idioma);// true|false
 		}
 		return existe;
+	}
+
+	public void decirAlgoEnTodosLosIdiomas(String algo) {
+		// dice algo SEGUROOOOOOO en el idoma nativo
+		this.idioma.decir(algo);
+
+		for (IIdioma aux : this.otrosIdiomas) {
+			aux.decir(algo);
+		}
 	}
 
 }// ctrl+sfhit+f
