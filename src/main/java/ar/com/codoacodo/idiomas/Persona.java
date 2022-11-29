@@ -1,24 +1,68 @@
 package ar.com.codoacodo.idiomas;
 
-public class Persona {
+public class Persona implements IHablar {
 	private String nombre;
-	private String idioma;
-	private String[] otrosIdiomas;
+	private IIdioma idioma;
 
-	public Persona(String nombre, String idioma) {
+	private IIdioma[] otrosIdiomas;
+
+	public Persona(String nombre, IIdioma idioma) {
 		this.nombre = nombre;
 		this.idioma = idioma;
-		this.otrosIdiomas = new String[10];
+		this.otrosIdiomas = new IIdioma[0];
 	}
 
-	public void decir(String palabra, String idioma) {
+	// ctrl+space
+	public void hablar() {
+		System.out.println(this.nombre + " sabe hablar: ");
+		System.out.println(this.idioma);
+		for (IIdioma idioma : this.otrosIdiomas) {
+			System.out.println(", " + idioma);
+		}
+	}
 
-		if (this.idioma.equalsIgnoreCase(idioma)) {
+	public void decir(String palabra, IIdioma idioma) {
+
+		if (this.idioma == idioma) {
 			System.out.println(this.nombre + " dice: " + palabra);
 		} else {
 			System.out.println(this.nombre + " no sabe decir " + palabra + " en " + idioma);
 		}
 
 	}
-}
-// ctrl+sfhit+f para formateo de texto
+
+	public void aprender(IIdioma idioma) {
+
+		if (!this.idioma.equals(idioma)) {// f6 f7
+			// ver si existe en el array de otrosIdiomas
+			if (hablaEsteIdioma(idioma)) {// f6
+				System.out.println(this.nombre + " ya habla " + idioma);
+			} else {
+				System.out.println(this.nombre + " aprede " + idioma);
+				this.otrosIdiomas = copiarIdiomas(idioma);
+			}
+		} else {
+			System.out.println(this.nombre + " ya habla " + idioma);
+		}
+	}
+
+	private IIdioma[] copiarIdiomas(IIdioma idioma) {
+		// agregarlo a la lista!!!!
+		IIdioma[] aux = new IIdioma[this.otrosIdiomas.length + 1];// [ ,]
+		for (int i = 0; i < this.otrosIdiomas.length; i++) {
+			aux[i] = this.otrosIdiomas[i];
+		}
+		// al final de nuevo array aux, agrego el idioma que aprende
+		aux[aux.length - 1] = idioma;
+		return aux;
+	}
+
+	private boolean hablaEsteIdioma(IIdioma idioma) {
+		boolean existe = false;
+		for (int i = 0; !existe && i < this.otrosIdiomas.length; i++) {
+			existe = this.otrosIdiomas[i].equals(idioma);// true|false
+		}
+		return existe;
+	}
+
+}// ctrl+sfhit+f
