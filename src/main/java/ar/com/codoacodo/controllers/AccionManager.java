@@ -8,7 +8,7 @@ public class AccionManager {
 		IAccion  accion = null;
 		switch (opcion) {
 		case 1:
-			accion = new CreateProductoController();
+			accion = (IAccion) new CreateProductoController();
 			break;
 		case 2:
 			break;
