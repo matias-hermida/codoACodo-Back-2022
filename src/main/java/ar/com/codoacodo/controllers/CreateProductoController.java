@@ -14,7 +14,7 @@ import ar.com.codoacodo.dao.impl.ProductoDAOMysqlImpl;
 import ar.com.codoacodo.domain.Producto;
 
 @WebServlet("/CreateProductoController")
-public class CreateProductoController extends HttpServlet{
+public class CreateProductoController extends BaseController {
 
 	
 	@Override
@@ -43,7 +43,9 @@ public class CreateProductoController extends HttpServlet{
 		}
 		
 		//ahora donde vamos!!!
-		
+		//ahora redirect!!!!
+		//getServletContext().getRequestDispatcher("/FindAllProductoController").forward(req, resp);
+		super.irA("/FindAllProductoController", req, resp);
 	}
 	
 	public static void main(String[] args) throws Exception{

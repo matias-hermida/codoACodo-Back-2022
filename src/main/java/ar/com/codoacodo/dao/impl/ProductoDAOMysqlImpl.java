@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,7 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		Statement statement = connection.createStatement();
 
 		// 3 - resultset
-		int eliminado = statement.executeUpdate(sql);//1 o 0
+		int eliminado = statement.executeUpdate(sql);//1 o 2
 		
 		cerrar(connection);
 		System.out.println(eliminado);
@@ -144,5 +145,33 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		String img = resultSet.getString("img");
 
 		return new Producto(idDb, codigo, titulo, precio, fechaAlta, autor, img);
+	}
+
+	@Override
+	public List<Producto> search(String clave) throws Exception {
+		// 1 - necesito la Connection
+		Connection connection = AdministradorDeConexiones.getConnection();
+
+		// 2 - arma el statement
+		String sql = "SELECT * FROM PRODUCTO WHERE TITULO LIKE ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		//setear el valor que va en remplazo del ?
+		statement.setString(1, "%" + clave + "%");
+		
+		// 3 - resultset
+		ResultSet resultSet = statement.executeQuery();
+
+		// Interface i = new ClaseQueImplementaLaInterface();
+		List<Producto> productos = new ArrayList<Producto>();
+
+		// verifico si hay datos
+		while (resultSet.next()) {
+			productos.add(this.crearProducto(resultSet));
+		}
+		
+		cerrar(connection);
+		
+		return productos;
 	}
 }

@@ -1,7 +1,6 @@
 package ar.com.codoacodo.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,42 +13,35 @@ import ar.com.codoacodo.dao.IProductoDAO;
 import ar.com.codoacodo.dao.impl.ProductoDAOMysqlImpl;
 import ar.com.codoacodo.domain.Producto;
 
-//una clase que extiendo de HttpServlet
-//GET > http://localhost:8080/app-web/FindAllProductoController
+@WebServlet("/SearchProductosController")
+public class SearchProductosController extends HttpServlet {
 
-@WebServlet("/FindAllProductoController")
-public class FindAllProductoController extends HttpServlet{
-
-	//tienen dos metondos:
-	//doGet
-	//doPost
-	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		//buscar en la db productos por titulo
 		IProductoDAO dao = new ProductoDAOMysqlImpl();
 		
-		//tengo la lista
-		List<Producto> productos = new ArrayList<>();
+		//obtengo la clave enviado desde el formulario que esta en navbar.jsp 
+		String clave = req.getParameter("claveBusqueda");
 		
-		//si explota la consulta a la la base, solo atrapo el error y muestro con consola el error
+		//FALTAN VALIDACIONES!!!
+		
+		//busco!
+		List<Producto> productos;
 		try {
-			productos = dao.findAll();//[p1,p2...pN] ctrl+
-		}catch (Exception e) {
+			productos = dao.search(clave);
+		} catch (Exception e) {
+			productos = List.of();//crea una lista vacia
 			e.printStackTrace();
 		}
-	
+		
+		//guardar en el request, los datos que encontre en la busqueda
 		//antes de irme a la nueva pagina: guardo en el request los datos que puede necesitar la JSP
 		//clave, valor
 		req.setAttribute("productos", productos);
-		//super.guardarDatoEnRequest(req, "productos", productos);
-		//super.guardarDatoEnSession(req, "productos", productos);
 		
 		//este bloque de codigo lo vamos a usar en todos lados
 		getServletContext().getRequestDispatcher("/listado.jsp").forward(req, resp);
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
 	}
 }

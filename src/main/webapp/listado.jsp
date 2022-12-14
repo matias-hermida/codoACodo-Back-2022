@@ -30,7 +30,7 @@
 				  <% //scriplet
 				  	//en las jsp exixte un objeto llamado request que esta implicito
 				  	//capurar/bajar/obtener la lista que guardamos en el controller
-				  	List<Producto> listado = (List<Producto>) request.getAttribute("productos");
+				  	List<Producto> listado = (List<Producto>)request.getAttribute("productos");
 				  	for(Producto p : listado) {
 				  %>
 				    <tr>
@@ -41,7 +41,16 @@
 				      <td><%=p.getFechaAlta()%></td>
 				      <td><%=p.getAutor()%></td>
 				      <td><%=p.getImg()%></td>
-				      <td>Editar | Eliminar</td>
+				      <td>
+				      	<a class="btn btn-info" role="button" href="<%=request.getContextPath()%>/EditarProductoController?id=<%=p.getId()%>">Editar</a> | 
+			      		<!-- Button trigger modal -->
+						<button type="button" class="btn btn-danger" 
+							data-bs-toggle="modal" 
+							data-bs-target="#exampleModal" 
+							onclick="setProductoId(<%=p.getId()%>)">
+						  Eliminar
+						</button>
+					</td>
 				    </tr>
 				  <%
 				  	}
@@ -50,6 +59,34 @@
 				</table>
 			</section>
 		</main>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		    	<form action="<%=request.getContextPath()%>/DeleteProductoController">
+		    	  <input type="hidden" name="idProducto" id="idProducto">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Eliminar Producto</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			      </div>
+			      <div class="modal-body">
+			        ¿Confirma que desea eliminar? 
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+			        <button type="submit" class="btn btn-danger">Eliminar</button>
+			      </div>
+		    	</form>
+		    </div>
+		  </div>
+		</div>
 		<jsp:include page="scripts.jsp"/>
+		<script>
+			function setProductoId(id) {
+				document.getElementById('idProducto').value=id;
+			}
+		</script>
 	</body>
+	
 </html>

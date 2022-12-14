@@ -25,5 +25,8 @@ public interface IProductoDAO {
 	public void create(Producto newProduct) throws Exception;
 	//insert into producto (campo1, ....m campoN)
 	//values(newProducto.campo1, ...newProducto.campoN)
+
+	//select * from producto where titulo like '%clave%' 
+	public List<Producto> search(String clave) throws Exception;
 	
 }
