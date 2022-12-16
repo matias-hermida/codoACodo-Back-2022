@@ -12,13 +12,14 @@
 		<jsp:include page="navbar.jsp"/>
 		<main class="container">
 			<h1>Listado de Producto</h1>
+			<jsp:include page="mensajeria.jsp"/>
 			<section>
 				<table class="table">
 				  <thead>
 				    <tr>
 				      <th scope="col">#</th>
-				      <th scope="col">Codigo</th>
-				      <th scope="col">Titulo</th>
+				      <th scope="col">C&oacute;digo</th>
+				      <th scope="col">T&iacute;tulo</th>
 				      <th scope="col">Precio</th>
 				      <th scope="col">Fecha Alta</th>
 				      <th scope="col">Autor</th>
@@ -59,7 +60,6 @@
 				</table>
 			</section>
 		</main>
-		
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">

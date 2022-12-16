@@ -1,7 +1,9 @@
 package ar.com.codoacodo.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +28,22 @@ public class CreateProductoController extends BaseController {
 		String fechaAlta = req.getParameter("fechaAlta");//name de input (ver como parsear la fecha)
 		String autor = req.getParameter("autor");//name de input
 		
+		//validaciones!
+		List<String> errores = new ArrayList<>();
+		if(titulo == null || "".equals(titulo)) {
+			errores.add("Titulo vacío");
+		}
+		if(codigo== null || "".equals(codigo)) {
+			errores.add("Codigo vacío");
+		}
+		//agrego las demas validaciones!!!! (uds)
+		if(!errores.isEmpty()) {
+			req.setAttribute("errors", errores);
+			//vuelvo a la jsp con la lista de errores cargadas 
+			super.irA("/nuevo.jsp", req, resp);
+			return;
+		}
+		
 		//TODO ver si podemos armar logica para cargar binario
 		String img = req.getParameter("img");//name de input (tratamiento especial)
 		
@@ -37,6 +55,8 @@ public class CreateProductoController extends BaseController {
 		try {
 			dao.create(newProducto);
 			//si todo ok ir a listado.jsp
+			//agregar mensaje de exito
+			req.setAttribute("success", List.of("Alta de producto exitosa"));
 		} catch (Exception e) {
 			//si falla volver al nuevo.jsp
 			e.printStackTrace();

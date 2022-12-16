@@ -5,8 +5,10 @@
 	</head>
 	<body>
 		<jsp:include page="navbar.jsp"/>
+		
 		<main class="container">
 			<h1>Nuevo Producto</h1>
+			<jsp:include page="mensajeria.jsp"/>
 			<div class="row">
 				<div class="col-12">
 					<form class="row g-3 needs-validation" novalidate
@@ -14,7 +16,7 @@
 						method="POST">
 					  <div class="col-md-4">
 					    <label for="validationCustom01" class="form-label">
-					    	Codigo
+					    	C&oacute;digo
 					    </label>
 					    <input type="text"
 					    	name="codigo" 
@@ -27,7 +29,7 @@
 					    </div>
 					  </div>
 					  <div class="col-md-4">
-					    <label for="validationCustom02" class="form-label">Titulo</label>
+					    <label for="validationCustom02" class="form-label">T&iacute;tulo</label>
 					    <input type="text"
 					    	name="titulo" 
 					    	class="form-control" 
@@ -93,6 +95,5 @@
 				</div>
 			</div>
 		</main>
-		<jsp:include page="scripts.jsp"/>
 	</body>
 </html>

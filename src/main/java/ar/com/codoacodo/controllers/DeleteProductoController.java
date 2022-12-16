@@ -1,6 +1,7 @@
 package ar.com.codoacodo.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,17 +15,6 @@ import ar.com.codoacodo.dao.impl.ProductoDAOMysqlImpl;
 @WebServlet("/DeleteProductoController")
 public class DeleteProductoController extends HttpServlet{
 
-	public static void main(String[] args) throws Exception{
-
-		//recibo el id desde el front (enviado por un formario o por url)
-		Long id = 4l;
-		
-		IProductoDAO dao = new ProductoDAOMysqlImpl();
-
-		//eliminar
-		dao.delete(id);//ctrl+t
-	}
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Long id = Long.parseLong(req.getParameter("idProducto"));//viene como String -> Long.parseLong()
@@ -35,9 +25,11 @@ public class DeleteProductoController extends HttpServlet{
 		try {
 			dao.delete(id);
 			//mensaje de exito
+			req.setAttribute("success", List.of("Se he eliminado el producto con id:" + id));
 		} catch (Exception e) {
 			e.printStackTrace();
 			//mensaje de error
+			req.setAttribute("erorrs", List.of("NO se he eliminado el producto :" + e.getMessage()));
 		}//ctrl+t
 		
 		//ahora redirect!!!!

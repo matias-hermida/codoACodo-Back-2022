@@ -2,6 +2,7 @@ package ar.com.codoacodo.controllers;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,8 +20,51 @@ public class EditarProductoController extends BaseController {
 	
 	//guardar los datos
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//carpturar los parametros que se van a actualizar
+		//capturar los parametros que se van a actualizar
+		String id = req.getParameter("id");
 		
+		//datos
+		String titulo = req.getParameter("titulo");//name de input
+		String precio = req.getParameter("precio");//name de input
+		String autor = req.getParameter("autor");//name de input
+		
+		//validaciones!!!
+		
+		//ok
+		IProductoDAO dao = new ProductoDAOMysqlImpl();
+		
+		Producto pDB = null;
+		try {
+			pDB = dao.getById(Long.parseLong(id));
+		} catch (Exception e) {
+			req.setAttribute("errors", List.of("Error actualizando Producto" + e.getMessage()));
+		}
+		if(pDB == null) {
+			irA("/FindAllProductoController", req, resp);
+			return;
+		}
+		
+		//recarga en el request el producto para poder verlo en ls jsp  
+		
+		
+		//si existe y no da error sigo!!!
+		try {
+			//ahora actualizo los datos en el producto
+			pDB.setAutor(autor);
+			pDB.setPrecio(Double.parseDouble(precio));
+			pDB.setTitulo(titulo);
+			
+			//a la base
+			dao.update(pDB);
+			
+			//aca mensaje de exito, PERO COMO UNA LISTA
+			req.setAttribute("success", List.of("Producto id:" + pDB.getId() + " actualizado correctamente"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			req.setAttribute("errors", List.of("Erro actualizando Producto" + e.getMessage()));
+		}
+		
+		irA("/FindAllProductoController", req, resp);
 	}
 
 	//cargar el producto y enviarlo a la jsp
@@ -43,7 +87,7 @@ public class EditarProductoController extends BaseController {
 		req.setAttribute("producto", p);
 		
 		//redirect
-		super.irA("/editar.jsp", req, resp);
+		irA("/editar.jsp", req, resp);
 	}
 
 }

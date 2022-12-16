@@ -12,9 +12,6 @@
 	<body>
 		<!-- aca va el navbar.jsp -->
 		<jsp:include page="navbar.jsp"/>
-		<button onclick="verListado()">
-			Ver Listado de producto
-		</button>
 		<jsp:include page="scripts.jsp"/>
 	</body>
 </html>

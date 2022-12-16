@@ -16,6 +16,7 @@
 					<form class="row g-3 needs-validation" novalidate
 						action="<%=request.getContextPath()%>/EditarProductoController"
 						method="POST">
+					  <input type="hidden" name="id" value="<%=p.getId()%>">
 					  <div class="col-md-4">
 					    <label for="validationCustom01" class="form-label">
 					    	C&oacute;digo
