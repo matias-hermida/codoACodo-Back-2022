@@ -82,6 +82,18 @@
 					    </div>
 					  </div>
 					  <div class="col-md-4">
+					    <label for="validationCustom04" class="form-label">Categoria</label>
+					    <input type="text"
+					    	name="cat" 
+					    	class="form-control" 
+					    	id="validationCustom03" 
+					    	value="<%=p.getCat()%>"
+					    	required>
+					    <div class="invalid-feedback">
+					      Please select a valid state.
+					    </div>
+					  </div>
+					  <div class="col-md-4">
 					    <label for="validationCustom05" class="form-label">Imagen</label>
 					    <div class="input-group">
 						  <input type="file"

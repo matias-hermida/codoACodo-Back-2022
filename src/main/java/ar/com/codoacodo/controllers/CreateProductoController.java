@@ -27,6 +27,7 @@ public class CreateProductoController extends BaseController {
 		String precio = req.getParameter("precio");//name de input
 		String fechaAlta = req.getParameter("fechaAlta");//name de input (ver como parsear la fecha)
 		String autor = req.getParameter("autor");//name de input
+		String cat = req.getParameter("cat");//name de input
 		
 		//validaciones!
 		List<String> errores = new ArrayList<>();
@@ -50,7 +51,7 @@ public class CreateProductoController extends BaseController {
 		IProductoDAO dao = new ProductoDAOMysqlImpl();
 
 		//facil
-		Producto newProducto = new Producto(codigo, titulo, Double.parseDouble(precio), new Date(), autor, img);
+		Producto newProducto = new Producto(codigo, titulo, Double.parseDouble(precio), new Date(), autor, img, cat);
 		
 		try {
 			dao.create(newProducto);
@@ -66,18 +67,6 @@ public class CreateProductoController extends BaseController {
 		//ahora redirect!!!!
 		//getServletContext().getRequestDispatcher("/FindAllProductoController").forward(req, resp);
 		super.irA("/FindAllProductoController", req, resp);
-	}
-	
-	public static void main(String[] args) throws Exception{
-
-		IProductoDAO dao = new ProductoDAOMysqlImpl();
-
-		//facil
-		Producto newProducto = new Producto("codigo00", "Codo a Codo FullStack java", 1D,new Date(), "Autor123", null);
-		
-		dao.create(newProducto);
-		
-		System.out.println("id generado para el nuevo producto: " + newProducto.getId());
 	}
 
 }

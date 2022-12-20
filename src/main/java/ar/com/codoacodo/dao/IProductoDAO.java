@@ -1,6 +1,7 @@
 package ar.com.codoacodo.dao;
 
-import java.util.List;
+import java.sql.SQLException;
+import java.util.*;
 
 import ar.com.codoacodo.domain.Producto;
 
@@ -28,5 +29,11 @@ public interface IProductoDAO {
 
 	//select * from producto where titulo like '%clave%' 
 	public List<Producto> search(String clave) throws Exception;
+
+	// 
+	public Set<String> allCategories() throws Exception;
+
+	//
+	public List<Producto> searchByCategory(List<String> categorias) throws Exception;
 	
 }

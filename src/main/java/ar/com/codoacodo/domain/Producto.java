@@ -11,17 +11,19 @@ public class Producto {
 	private Date fechaAlta;
 	private String autor;
 	private String img;
+	private String cat;
 
-	public Producto(String codigo, String titulo, Double precio, Date fechaAlta, String autor, String img) {
+	public Producto(String codigo, String titulo, Double precio, Date fechaAlta, String autor, String img, String cat) {
 		this.codigo = codigo;
 		this.titulo = titulo;
 		this.precio = precio;
 		this.fechaAlta = fechaAlta;
 		this.autor = autor;
 		this.img = img;
+		this.cat = cat;
 	}
 
-	public Producto(Long id, String codigo, String titulo, Double precio, Date fechaAlta, String autor, String img) {
+	public Producto(Long id, String codigo, String titulo, Double precio, Date fechaAlta, String autor, String img, String cat) {
 		this.id = id;
 		this.codigo = codigo;
 		this.titulo = titulo;
@@ -29,6 +31,7 @@ public class Producto {
 		this.fechaAlta = fechaAlta;
 		this.autor = autor;
 		this.img = img;
+		this.cat = cat;
 	}
 
 	public Long getId() {
@@ -85,6 +88,14 @@ public class Producto {
 
 	public void setImg(String img) {
 		this.img = img;
+	}
+	
+	public String getCat() {
+		return cat;
+	}
+
+	public void setCat(String cat) {
+		this.cat = cat;
 	}
 
 	@Override

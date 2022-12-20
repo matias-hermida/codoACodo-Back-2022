@@ -1,6 +1,7 @@
 package ar.com.codoacodo.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +28,21 @@ public class EditarProductoController extends BaseController {
 		String titulo = req.getParameter("titulo");//name de input
 		String precio = req.getParameter("precio");//name de input
 		String autor = req.getParameter("autor");//name de input
+		String img = req.getParameter("img");//name de input
+		String cat = req.getParameter("cat");//name de input
 		
-		//validaciones!!!
+		//validaciones!
+		List<String> errores = new ArrayList<>();
+		if(titulo == null || "".equals(titulo)) {
+			errores.add("Titulo vacío");
+		}
+		//agrego las demas validaciones!!!! (uds)
+		if(!errores.isEmpty()) {
+			req.setAttribute("errors", errores);
+			//vuelvo a la jsp con la lista de errores cargadas 
+			super.irA("/nuevo.jsp", req, resp);
+			return;
+		}
 		
 		//ok
 		IProductoDAO dao = new ProductoDAOMysqlImpl();
@@ -53,6 +67,8 @@ public class EditarProductoController extends BaseController {
 			pDB.setAutor(autor);
 			pDB.setPrecio(Double.parseDouble(precio));
 			pDB.setTitulo(titulo);
+			pDB.setImg(img);
+			pDB.setCat(cat);
 			
 			//a la base
 			dao.update(pDB);

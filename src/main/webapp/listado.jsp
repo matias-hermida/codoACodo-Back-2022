@@ -1,7 +1,10 @@
 <!Doctype html>
 <!-- directiva para importar clases-->
 <%@page import="ar.com.codoacodo.domain.Producto"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
+<%@page import="ar.com.codoacodo.dao.IProductoDAO"%>
+<%@page import="ar.com.codoacodo.dao.impl.ProductoDAOMysqlImpl"%>
+
 <html lang="es">
 	<head>
 		<jsp:include page="styles.jsp"/>
@@ -11,53 +14,64 @@
 		<!-- aca va el navbar.jsp -->
 		<jsp:include page="navbar.jsp"/>
 		<main class="container">
-			<h1>Listado de Producto</h1>
+			<div class="col-1">
+				<h3>Categorias:</h3>
+			  <%
+				IProductoDAO dao = new ProductoDAOMysqlImpl();
+				Set<String> setCategoria = dao.allCategories();
+				%>
+				<form class="d-flex" action="<%=request.getContextPath()%>/SearchProductosByCategoryController">
+				<%for(String cat : setCategoria) {
+					%>
+					  <div class="m-3 form-check">
+					    <input type="checkbox" class="form-check-input" id="exampleCheck1" name="<%=cat%>">
+					    <label class="form-check-label" for="exampleCheck1"><%=cat%></label>
+					  </div>
+				<% } %>
+				  <button type="submit" class="btn btn-primary">Filtrar</button>
+				</form>
+			</div>
+			<h1>Productos:</h1>
 			<jsp:include page="mensajeria.jsp"/>
 			<section>
-				<table class="table">
-				  <thead>
-				    <tr>
-				      <th scope="col">#</th>
-				      <th scope="col">C&oacute;digo</th>
-				      <th scope="col">T&iacute;tulo</th>
-				      <th scope="col">Precio</th>
-				      <th scope="col">Fecha Alta</th>
-				      <th scope="col">Autor</th>
-				      <th scope="col">Imagen</th>
-				      <th scope="col">&nbsp;</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				  <% //scriplet
+				<div class="col-12">
+		          <div class="row row-cols-8 g-4">
+				  <% //scriplet	
 				  	//en las jsp exixte un objeto llamado request que esta implicito
 				  	//capurar/bajar/obtener la lista que guardamos en el controller
-				  	List<Producto> listado = (List<Producto>)request.getAttribute("productos");
-				  	for(Producto p : listado) {
+			  		List<Producto> listado2 = (List<Producto>)request.getAttribute("productos");
+				  	for(Producto p : listado2) {
 				  %>
-				    <tr>
-				      <th scope="row"><%=p.getId()%></th>
-				      <td><%=p.getCodigo()%></td>
-				      <td><%=p.getTitulo()%></td>
-				      <td><%=p.getPrecio()%></td>
-				      <td><%=p.getFechaAlta()%></td>
-				      <td><%=p.getAutor()%></td>
-				      <td><%=p.getImg()%></td>
-				      <td>
-				      	<a class="btn btn-info" role="button" href="<%=request.getContextPath()%>/EditarProductoController?id=<%=p.getId()%>">Editar</a> | 
-			      		<!-- Button trigger modal -->
-						<button type="button" class="btn btn-danger" 
+		            <div class="col">
+		         	     <div class="card" style="width: 20rem;">
+		                <img src="imagenes/<%=p.getImg()%>" class="card-img-top" alt="...">
+		                <div class="card-body">
+		                  <h5 class="card-title"><%=p.getTitulo()%></h5>
+		                </div>
+		                <ul class="list-group list-group-flush">
+		                  <li class="list-group-item">Precio = $<%=p.getPrecio()%></li>
+		                  <li class="list-group-item">Autor = <%=p.getAutor()%></li>
+		                  <li class="list-group-item">Codigo = <%=p.getCodigo()%></li>
+		                  <li class="list-group-item">id = <%=p.getId()%></li>
+		                  <li class="list-group-item">Fecha Alta = <%=p.getFechaAlta()%></li>
+		                  <li class="list-group-item">Categoria = <%=p.getCat()%></li>
+		                </ul>
+		                <div class="card-footer">
+		                  <a class="btn btn-info" role="button" href="<%=request.getContextPath()%>/EditarProductoController?id=<%=p.getId()%>">Editar</a> | 
+		                  <button type="button" class="btn btn-danger" 
 							data-bs-toggle="modal" 
 							data-bs-target="#exampleModal" 
 							onclick="setProductoId(<%=p.getId()%>)">
-						  Eliminar
-						</button>
-					</td>
-				    </tr>
+						  		Eliminar
+							</button>
+		                </div>
+		              </div>
+		            </div>
 				  <%
 				  	}
-				  %>				    
-				  </tbody>
-				</table>
+				  %>
+		          </div>
+		        </div>
 			</section>
 		</main>
 		<!-- Modal -->

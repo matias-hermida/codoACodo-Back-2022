@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ar.com.codoacodo.dao.IProductoDAO;
 import ar.com.codoacodo.db.AdministradorDeConexiones;
@@ -91,7 +93,7 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		Connection connection = AdministradorDeConexiones.getConnection();
 
 		// 2 - arma el statement
-		String sql = "UPDATE PRODUCTO set titulo=?, precio=?, autor=?, img=? WHERE id=?";
+		String sql = "UPDATE PRODUCTO set titulo=?, precio=?, autor=?, img=?, cat=? WHERE id=?";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 		//cambiar los ? por el tipo de dato y su valor
@@ -99,7 +101,8 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		statement.setDouble(2,producto.getPrecio());
 		statement.setString(3,producto.getAutor());
 		statement.setString(4,producto.getImg());
-		statement.setLong(5,producto.getId());
+		statement.setString(5,producto.getCat());
+		statement.setLong(6,producto.getId());
 		
 		statement.execute();
 		
@@ -111,8 +114,8 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		// 1 - necesito la Connection
 		Connection connection = AdministradorDeConexiones.getConnection();
 
-		// 2 - arma el statement															  1 2 3 4 5 6
-		String sql = "INSERT INTO PRODUCTO (codigo,titulo,precio,fecha_alta,autor,img) values(?,?,?,?,?,?)" ;
+		// 2 - arma el statement															      1 2 3 4 5 6 7
+		String sql = "INSERT INTO PRODUCTO (codigo,titulo,precio,fecha_alta,autor,img,cat) values(?,?,?,?,?,?,?)" ;
 		
 		PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 		//cambiar los ? por el tipo de dato y su valor
@@ -122,6 +125,7 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		statement.setDate(4, new java.sql.Date(producto.getFechaAlta().getTime()));
 		statement.setString(5,producto.getAutor());
 		statement.setString(6,producto.getImg());
+		statement.setString(7,producto.getCat());
 		
 		statement.execute();
 		
@@ -143,8 +147,9 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		Date fechaAlta = resultSet.getDate("fecha_alta");
 		String autor = resultSet.getString("autor");
 		String img = resultSet.getString("img");
+		String cat = resultSet.getString("cat");
 
-		return new Producto(idDb, codigo, titulo, precio, fechaAlta, autor, img);
+		return new Producto(idDb, codigo, titulo, precio, fechaAlta, autor, img, cat);
 	}
 
 	@Override
@@ -168,6 +173,50 @@ public class ProductoDAOMysqlImpl implements IProductoDAO {
 		// verifico si hay datos
 		while (resultSet.next()) {
 			productos.add(this.crearProducto(resultSet));
+		}
+		
+		cerrar(connection);
+		
+		return productos;
+	}
+	
+	@Override 
+	public Set<String> allCategories() throws Exception {
+		List<Producto> productos = this.findAll();
+
+		List<String> listadoCategoria = new ArrayList<String>();
+		for(Producto p : productos) {
+			listadoCategoria.add(p.getCat());
+		}
+		
+		Set<String> setCategorias = new HashSet<>(listadoCategoria);
+		
+		return setCategorias;
+	}
+
+	@Override
+	public List<Producto> searchByCategory(List<String> categorias) throws Exception {
+		// 1 - necesito la Connection
+		Connection connection = AdministradorDeConexiones.getConnection();
+
+		// 2 - arma el statement
+		String sql = "SELECT * FROM PRODUCTO WHERE CAT = ?";
+		PreparedStatement statement = connection.prepareStatement(sql);
+
+		// Interface i = new ClaseQueImplementaLaInterface();
+		List<Producto> productos = new ArrayList<Producto>();
+		
+		for(String cat : categorias) {
+			//setear el valor que va en remplazo del ?
+			statement.setString(1, cat);
+			
+			// 3 - resultset
+			ResultSet resultSet = statement.executeQuery();
+
+			// verifico si hay datos
+			while (resultSet.next()) {
+				productos.add(this.crearProducto(resultSet));
+			}
 		}
 		
 		cerrar(connection);
